@@ -21,7 +21,7 @@ Reduction R1(SymEnc E, MAC M, EncryptThenMAC EtM) compose Security(M) against CC
         if (c in S) {
             return None;
         }
-        if (!challenger.CheckTag(c[0], c[1])) {
+        if (!(challenger.CheckTag(c[0], c[1]))) {
             return None;
         }
         return E.Dec(ke, c[0]);
@@ -66,7 +66,7 @@ Reduction R3(SymEnc E, MAC M, EncryptThenMAC EtM) compose Security(M) against CC
         if (c in S) {
             return None;
         }
-        if (!challenger.CheckTag(c[0], c[1])) {
+        if (!(challenger.CheckTag(c[0], c[1]))) {
             return None;
         }
         return E.Dec(ke, c[0]);
