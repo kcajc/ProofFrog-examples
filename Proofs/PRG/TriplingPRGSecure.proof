@@ -18,7 +18,7 @@ Reduction R2(TriplingPRG T, Int lambda) compose BitStringSampling(lambda, lambda
     BitString<T.lambda + T.stretch> Query() {
         BitString<2 * T.lambda> result1 = challenger.Query();
         BitString<T.lambda> x = result1[0 : T.lambda];
-        BitString<T.lambda> y = result1[lambda : 2*T.lambda];
+        BitString<T.lambda> y = result1[T.lambda : 2*T.lambda];
         BitString<2 * T.lambda> result2 = G.evaluate(y);
 
         return x || result2;
