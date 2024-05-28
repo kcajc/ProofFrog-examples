@@ -27,7 +27,7 @@ let:
 
 assume:
     Security(G);
-    OneTimeUniformCiphertexts(P);
+    OneTimeUniformCiphertexts(P); // see 'examples/Book/Exercises/5_8_e_PseudoOTP_OTUC.proof'
 
 theorem:
     Security(H);
