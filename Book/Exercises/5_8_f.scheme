@@ -3,14 +3,12 @@ import 'examples/Primitives/PRG.primitive';
 Scheme PRG_5_8_f(PRG G) extends PRG {
     requires G.stretch == 2 * G.lambda;
 
-    int lambda = 2 * G.lambda; // This may change if you want to write another security game
+    int lambda = 2 * G.lambda; // seed length
     int stretch = G.lambda;
 
     BitString<lambda + stretch> evaluate(BitString<lambda> s) {
-        BitString<0.5 * lambda> sL = s[0 : 0.5 * lambda];
-        BitString<0.5 * lambda> sR = s[0.5 * lambda : lambda];
-        BitString<lambda + stretch> x = G.evaluate(sL);
-        BitString<lambda + stretch> y = G.evaluate(sR);
-        return x + y;
+        BitString<G.lambda> sL = s[0 : G.lambda];
+        BitString<G.lambda> sR = s[G.lambda : lambda];
+        return G.evaluate(sL) + G.evaluate(sR);
     }
 }

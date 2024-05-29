@@ -1,20 +1,30 @@
 import 'examples/Primitives/PRG.primitive';
-import 'examples/Book/Exercises/5_8_e.scheme';
+import 'examples/Book/Exercises/5_8_f.scheme';
 import 'examples/Book/5/5_2_PseudoOTP.scheme';
 import 'examples/Games/Misc/BitStringSampling.game';
 import 'examples/Games/PRG/Security.game';
 import 'examples/Games/SymEnc/OneTimeUniformCiphertexts.game';
 
-Reduction R1(PRG G, PRG_5_8_f H) compose Security(G) against Security(H).Adversary {
+Reduction R1(PRG G, PRG_5_8_f H) compose BitStringSampling(lambda, lambda) against Security(H).Adversary {
     BitString<H.lambda + H.stretch> Query() {
-        return challenger.Query() + G.evaluate(0b0);
+        BitString<H.lambda> s = challenger.Query();
+        BitString<G.lambda> sL = s[0 : G.lambda];
+        BitString<G.lambda> sR = s[G.lambda : H.lambda];
+        return G.evaluate(sL) + G.evaluate(sR);
     }
 }
 
-Reduction R2(PRG G, PRG_5_8_f H) compose OneTimeUniformCiphertexts(P) against Security(H).Adversary {
+Reduction R2(PRG G, PRG_5_8_f H) compose Security(G) against Security(H).Adversary {
     BitString<H.lambda + H.stretch> Query() {
-        BitString<3 * H.lambda> result = challenger.CTXT(G.evaluate(0b0));
-        return result;
+        BitString<G.lambda> sR <- BitString<G.lambda>;
+        return challenger.Query() + G.evaluate(sR);
+    }
+}
+
+Reduction R3(PRG G, PRG_5_8_f H) compose OneTimeUniformCiphertexts(P) against Security(H).Adversary {
+    BitString<H.lambda + H.stretch> Query() {
+        BitString<G.lambda> sR <- BitString<G.lambda>;
+        return challenger.CTXT(G.evaluate(sR));
     }
 }
 
@@ -37,10 +47,14 @@ theorem:
 games:
     Security(H).Real against Security(H).Adversary;
 
-    Security(G).Real compose R1(G, H) against Security(H).Adversary;
+    BitStringSampling(lambda, lambda).SampleDirectly compose R1(G, H) against Security(H).Adversary;
 
-    OneTimeUniformCiphertexts(P).Real compose R2(G, H) against Security(H).Adversary;
+    BitStringSampling(lambda, lambda).Concatenate compose R1(G, H) against Security(H).Adversary;
 
-    OneTimeUniformCiphertexts(P).Random compose R2(G, H) against Security(H).Adversary;
+    Security(G).Real compose R2(G, H) against Security(H).Adversary;
+
+    OneTimeUniformCiphertexts(P).Real compose R3(G, H) against Security(H).Adversary;
+
+    OneTimeUniformCiphertexts(P).Random compose R3(G, H) against Security(H).Adversary;
 
     Security(H).Random against Security(H).Adversary;
