@@ -1,5 +1,5 @@
 import 'examples/Primitives/SymEnc.primitive';
-import 'examples/Book/Exercises/7_13.game';
+import 'examples/Book/7_Exercises/7_13.game';
 import 'examples/Games/SymEnc/CPA.game';
 
 Reduction R(SymEnc E) compose CPA(E) against Challenge(E).Adversary {

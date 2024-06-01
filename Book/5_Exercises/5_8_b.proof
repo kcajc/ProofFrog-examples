@@ -1,7 +1,7 @@
 import 'examples/Primitives/PRG.primitive';
 import 'examples/Games/Misc/BitStringSampling.game';
-import 'examples/Book/Exercises/5_8_b.scheme';
-import 'examples/Book/Exercises/5_8_ThreePartBitStringSampling.game';
+import 'examples/Book/5_Exercises/5_8_b.scheme';
+import 'examples/Book/5_Exercises/5_8_ThreePartBitStringSampling.game';
 import 'examples/Games/PRG/Security.game';
 
 Reduction R1(PRG G, PRG_5_8_b H) compose Security(G) against Security(H).Adversary {

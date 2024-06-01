@@ -1,5 +1,5 @@
 import 'examples/Primitives/SymEnc.primitive';
-import 'examples/Book/Exercises/2_13_SymEncSquared.scheme';
+import 'examples/Book/2_Exercises/2_13_SymEncSquared.scheme';
 import 'examples/Games/SymEnc/OneTimeSecrecy.game';
 
 Reduction R(SymEncSquared S, SymEnc E) 

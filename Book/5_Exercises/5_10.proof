@@ -1,0 +1,91 @@
+import 'examples/Primitives/PRG.primitive';
+import 'examples/Book/5_Exercises/5_10.scheme';
+import 'examples/Book/5/5_2_PseudoOTP.scheme';
+import 'examples/Games/Misc/BitStringSampling.game';
+import 'examples/Games/PRG/Security.game';
+import 'examples/Games/SymEnc/OneTimeUniformCiphertexts.game';
+
+Reduction R1(PRG G, PRG_5_10 H) compose Security(G) against Security(H).Adversary {
+    BitString<H.lambda + H.stretch> Query() {
+        BitString<G.lambda + G.stretch> xy = challenger.Query();
+        BitString<G.lambda> x = xy[0 : G.lambda];
+        BitString<G.lambda> y = xy[G.lambda : 2 * G.lambda];
+        BitString<G.lambda + G.stretch> uv = G.evaluate(y);
+        return (x + y) || uv;
+    }
+}
+
+Reduction R2(PRG G, PRG_5_10 H) compose BitStringSampling(lambda, lambda) against Security(H).Adversary {
+    BitString<H.lambda + H.stretch> Query() {
+        BitString<G.lambda + G.stretch> xy = challenger.Query();
+        BitString<G.lambda> x = xy[0 : G.lambda];
+        BitString<G.lambda> y = xy[G.lambda : 2 * G.lambda];
+        BitString<G.lambda + G.stretch> uv = G.evaluate(y);
+        return (x + y) || uv;
+    }
+}
+
+Reduction R3(PRG G, PRG_5_10 H) compose OneTimeUniformCiphertexts(P) against Security(H).Adversary {
+    BitString<H.lambda + H.stretch> Query() {
+        BitString<G.lambda> y <- BitString<lambda>;
+        BitString<G.lambda> c = challenger.CTXT(y);
+        BitString<G.lambda + G.stretch> uv = G.evaluate(y);
+        return c || uv;
+    }
+}
+
+Reduction R4(PRG G, PRG_5_10 H) compose Security(G) against Security(H).Adversary {
+    BitString<H.lambda + H.stretch> Query() {
+        BitString<G.lambda> c <- BitString<lambda>;
+        BitString<G.lambda + G.stretch> uv = challenger.Query();
+        return c || uv;
+    }
+}
+
+Reduction R5(PRG G, PRG_5_10 H) compose BitStringSampling(H.lambda, H.stretch) against Security(H).Adversary {
+    BitString<H.lambda + H.stretch> Query() {
+        BitString<H.lambda + H.stretch> result = challenger.Query();
+        BitString<G.lambda> c = result[0 : H.lambda];
+        BitString<G.lambda> uv = xy[H.lambda : H.lambda + H.stretch];
+        return c || uv;
+    }
+}
+
+proof:
+
+let:
+    Int lambda;
+    PRG G = PRG(lambda, lambda);
+    PRG_5_10 H = PRG_5_10(G);
+    PseudoOTP P = PseudoOTP(lambda, lambda, G);
+
+assume:
+    Security(G);
+    BitStringSampling(lambda, lambda);
+    OneTimeUniformCiphertexts(P); // see 'examples/Book/5_Exercises/5_8_PseudoOTP_OTUC.proof'
+
+theorem:
+    Security(H);
+
+games:
+    Security(H).Real against Security(H).Adversary;
+
+    Security(G).Real compose R1(G, H) against Security(H).Adversary;
+
+    Security(G).Random compose R1(G, H) against Security(H).Adversary;
+
+    BitStringSampling(lambda, lambda).SampleDirectly compose R2(G, H) against Security(H).Adversary;
+
+    BitStringSampling(lambda, lambda).Concatenate compose R2(G, H) against Security(H).Adversary;
+
+    OneTimeUniformCiphertexts(P).Random compose R3(G, H) against Security(H).Adversary;
+
+    Security(G).Real compose R4(G, H) against Security(H).Adversary;
+
+    Security(G).Random compose R4(G, H) against Security(H).Adversary;
+
+    BitStringSampling(lambda, lambda).Concatenate compose R5(G, H) against Security(H).Adversary;
+
+    BitStringSampling(lambda, lambda).SampleDirectly compose R5(G, H) against Security(H).Adversary;
+
+    Security(H).Random against Security(H).Adversary;

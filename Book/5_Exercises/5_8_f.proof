@@ -1,5 +1,5 @@
 import 'examples/Primitives/PRG.primitive';
-import 'examples/Book/Exercises/5_8_f.scheme';
+import 'examples/Book/5_Exercises/5_8_f.scheme';
 import 'examples/Book/5/5_2_PseudoOTP.scheme';
 import 'examples/Games/Misc/BitStringSampling.game';
 import 'examples/Games/PRG/Security.game';
@@ -39,7 +39,7 @@ let:
 assume:
     Security(G);
     BitStringSampling(lambda, lambda);
-    OneTimeUniformCiphertexts(P); // see 'examples/Book/Exercises/5_8_PseudoOTP_OTUC.proof'
+    OneTimeUniformCiphertexts(P); // see 'examples/Book/5_Exercises/5_8_PseudoOTP_OTUC.proof'
 
 theorem:
     Security(H);
