@@ -92,4 +92,3 @@ games:
     BitStringSampling(H.lambda, H.stretch).SampleDirectly compose R5(G, H) against Security(H).Adversary;
 
     Security(H).Random against Security(H).Adversary;
-    
