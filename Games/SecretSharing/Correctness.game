@@ -16,7 +16,7 @@ Game Real(SecretSharing E) {
 }
 
 Game Fake(SecretSharing E) {
-    Bool? Test(Set<int> U, E.Message m) {
+    Bool? Test(Set<Int> U, E.Message m) {
         if (|U| < E.threshold) {
             return None;
         }

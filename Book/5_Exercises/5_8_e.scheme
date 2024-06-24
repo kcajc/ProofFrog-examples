@@ -3,8 +3,8 @@ import 'examples/Primitives/PRG.primitive';
 Scheme PRG_5_8_e(PRG G) extends PRG {
     requires G.stretch == 2 * G.lambda;
 
-    int lambda = G.lambda;
-    int stretch = G.stretch;
+    Int lambda = G.lambda;
+    Int stretch = G.stretch;
 
     BitString<lambda + stretch> evaluate(BitString<lambda> s) {
         return G.evaluate(s) + G.evaluate(0b0);

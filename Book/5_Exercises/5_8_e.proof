@@ -10,7 +10,7 @@ Reduction R1(PRG G, PRG_5_8_e H) compose Security(G) against Security(H).Adversa
     }
 }
 
-Reduction R2(PRG G, PRG_5_8_e H) compose OneTimeUniformCiphertexts(P) against Security(H).Adversary {
+Reduction R2(PseudoOTP P, PRG G, PRG_5_8_e H) compose OneTimeUniformCiphertexts(P) against Security(H).Adversary {
     BitString<H.lambda + H.stretch> Query() {
         BitString<3 * H.lambda> result = challenger.CTXT(G.evaluate(0b0));
         return result;
@@ -37,8 +37,8 @@ games:
 
     Security(G).Real compose R1(G, H) against Security(H).Adversary;
 
-    OneTimeUniformCiphertexts(P).Real compose R2(G, H) against Security(H).Adversary;
+    OneTimeUniformCiphertexts(P).Real compose R2(P, G, H) against Security(H).Adversary;
 
-    OneTimeUniformCiphertexts(P).Random compose R2(G, H) against Security(H).Adversary;
+    OneTimeUniformCiphertexts(P).Random compose R2(P, G, H) against Security(H).Adversary;
 
     Security(H).Random against Security(H).Adversary;

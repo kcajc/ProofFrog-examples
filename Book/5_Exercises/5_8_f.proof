@@ -5,7 +5,7 @@ import 'examples/Games/Misc/BitStringSampling.game';
 import 'examples/Games/PRG/Security.game';
 import 'examples/Games/SymEnc/OneTimeUniformCiphertexts.game';
 
-Reduction R1(PRG G, PRG_5_8_f H) compose BitStringSampling(lambda, lambda) against Security(H).Adversary {
+Reduction R1(PRG G, PRG_5_8_f H) compose BitStringSampling(G.lambda, G.lambda) against Security(H).Adversary {
     BitString<H.lambda + H.stretch> Query() {
         BitString<H.lambda> s = challenger.Query();
         BitString<G.lambda> sL = s[0 : G.lambda];
@@ -21,7 +21,7 @@ Reduction R2(PRG G, PRG_5_8_f H) compose Security(G) against Security(H).Adversa
     }
 }
 
-Reduction R3(PRG G, PRG_5_8_f H) compose OneTimeUniformCiphertexts(P) against Security(H).Adversary {
+Reduction R3(PRG G, PRG_5_8_f H, PseudoOTP P) compose OneTimeUniformCiphertexts(P) against Security(H).Adversary {
     BitString<H.lambda + H.stretch> Query() {
         BitString<G.lambda> sR <- BitString<G.lambda>;
         return challenger.CTXT(G.evaluate(sR));
@@ -53,8 +53,8 @@ games:
 
     Security(G).Real compose R2(G, H) against Security(H).Adversary;
 
-    OneTimeUniformCiphertexts(P).Real compose R3(G, H) against Security(H).Adversary;
+    OneTimeUniformCiphertexts(P).Real compose R3(G, H, P) against Security(H).Adversary;
 
-    OneTimeUniformCiphertexts(P).Random compose R3(G, H) against Security(H).Adversary;
+    OneTimeUniformCiphertexts(P).Random compose R3(G, H, P) against Security(H).Adversary;
 
     Security(H).Random against Security(H).Adversary;

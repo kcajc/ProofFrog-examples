@@ -1,11 +1,11 @@
-Game Replacement(int lambda) {
+Game Replacement(Int lambda) {
     BitString<lambda> Samp() {
         BitString<lambda> r <- BitString<lambda>;
         return r;
     }
 }
 
-Game NoReplacement(int lambda) {
+Game NoReplacement(Int lambda) {
     Set<BitString<lambda>> R;
 
     BitString<lambda> Samp() {
