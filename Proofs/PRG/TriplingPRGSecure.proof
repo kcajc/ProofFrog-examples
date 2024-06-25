@@ -7,14 +7,14 @@ Reduction R1(PRG G, TriplingPRG T) compose Security(G) against Security(T).Adver
     BitString<T.lambda + T.stretch> Query() {
         BitString<2 * T.lambda> result1 = challenger.Query();
         BitString<T.lambda> x = result1[0 : T.lambda];
-        BitString<T.lambda> y = result1[lambda : 2*T.lambda];
+        BitString<T.lambda> y = result1[T.lambda : 2*T.lambda];
         BitString<2 * T.lambda> result2 = G.evaluate(y);
 
         return x || result2;
     }
 }
 
-Reduction R2(TriplingPRG T, Int lambda) compose BitStringSampling(lambda, lambda) against Security(T).Adversary {
+Reduction R2(PRG G, TriplingPRG T, Int lambda) compose BitStringSampling(lambda, lambda) against Security(T).Adversary {
     BitString<T.lambda + T.stretch> Query() {
         BitString<2 * T.lambda> result1 = challenger.Query();
         BitString<T.lambda> x = result1[0 : T.lambda];
@@ -27,7 +27,7 @@ Reduction R2(TriplingPRG T, Int lambda) compose BitStringSampling(lambda, lambda
 
 Reduction R3(PRG G, TriplingPRG T) compose Security(G) against Security(T).Adversary {
     BitString<T.lambda + T.stretch> Query() {
-        BitString<T.lambda> x <- BitString<lambda>;
+        BitString<T.lambda> x <- BitString<T.lambda>;
         BitString<2 * T.lambda> result2 = challenger.Query();
         return x || result2;
     }
@@ -61,9 +61,9 @@ games:
 
     Security(G).Random compose R1(G, T) against Security(T).Adversary;
 
-    BitStringSampling(lambda, lambda).SampleDirectly compose R2(T, lambda) against Security(T).Adversary;
+    BitStringSampling(lambda, lambda).SampleDirectly compose R2(G, T, lambda) against Security(T).Adversary;
 
-    BitStringSampling(lambda, lambda).Concatenate compose R2(T, lambda) against Security(T).Adversary;
+    BitStringSampling(lambda, lambda).Concatenate compose R2(G, T, lambda) against Security(T).Adversary;
 
     Security(G).Real compose R3(G, T) against Security(T).Adversary;
 

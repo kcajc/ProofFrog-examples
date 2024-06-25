@@ -6,37 +6,37 @@ import 'examples/Games/Misc/OTPOTS.game';
 
 Reduction R1(PseudoOTP P, PRG G) compose Security(G) against OneTimeSecrecy(P).Adversary {
     P.Ciphertext Eavesdrop(P.Message mL, P.Message mR) {
-        BitString<lambda + stretch> c = challenger.Query() + mL;
+        P.Ciphertext c = challenger.Query() + mL;
         return c;
     }
 }
 
 Game Intermediate1(PseudoOTP P, PRG G) {
     P.Ciphertext Eavesdrop(P.Message mL, P.Message mR) {
-        BitString<lambda + stretch> z <- BitString<lambda + stretch>;
-        BitString<lambda + stretch> c = z + mL;
+        P.Ciphertext z <- P.Ciphertext;
+        P.Ciphertext c = z + mL;
         return c;
     }
 }
 
 Reduction R2(PseudoOTP P, Int size) compose OTPOTS(size) against OneTimeSecrecy(P).Adversary {
     P.Ciphertext Eavesdrop(P.Message mL, P.Message mR) {
-        BitString<lambda + stretch> c = challenger.Eavesdrop(mL, mR);
+        P.Ciphertext c = challenger.Eavesdrop(mL, mR);
         return c;
     }
 }
 
 Game Intermediate2(PseudoOTP P, PRG G) {
     P.Ciphertext Eavesdrop(P.Message mL, P.Message mR) {
-        BitString<lambda + stretch> z <- BitString<lambda + stretch>;
-        BitString<lambda + stretch> c = z + mR;
+        P.Ciphertext z <- P.Ciphertext;
+        P.Ciphertext c = z + mR;
         return c;
     }
 }
 
 Reduction R3(PseudoOTP P, PRG G) compose Security(G) against OneTimeSecrecy(P).Adversary {
     P.Ciphertext Eavesdrop(P.Message mL, P.Message mR) {
-        BitString<lambda + stretch> c = challenger.Query() + mR;
+        P.Ciphertext c = challenger.Query() + mR;
         return c;
     }
 }

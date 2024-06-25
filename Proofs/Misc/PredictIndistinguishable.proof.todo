@@ -1,6 +1,6 @@
 import 'examples/Games/Misc/PredictBitString.game';
 
-Game PredictBitStringIntermdiate1(int lambda) {
+Game PredictBitStringIntermdiate1(Int lambda) {
     Bool bad;
 
     Void Initialize() {
@@ -17,7 +17,7 @@ Game PredictBitStringIntermdiate1(int lambda) {
     }
 }
 
-Game PredictBitStringItermediate2(int lambda) {
+Game PredictBitStringItermediate2(Int lambda) {
     Bool bad;
 
     Void Initialize() {
@@ -36,7 +36,7 @@ Game PredictBitStringItermediate2(int lambda) {
 proof:
 
 let:
-    int lambda;
+    Int lambda;
 
 assume:
 

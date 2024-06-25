@@ -1,6 +1,6 @@
 import 'examples/Games/Misc/Sample.game';
 
-Game SampleIntermediate1(int lambda) {
+Game SampleIntermediate1(Int lambda) {
     Set<BitString<lambda>> R;
     Bool bad;
 
@@ -19,7 +19,7 @@ Game SampleIntermediate1(int lambda) {
     }
 }
 
-Game SampleIntermediate2(int lambda) {
+Game SampleIntermediate2(Int lambda) {
     Set<BitString<lambda>> R;
     Bool bad;
 
@@ -42,7 +42,7 @@ Game SampleIntermediate2(int lambda) {
 proof:
 
 let:
-    int lambda;
+    Int lambda;
 
 assume:
 

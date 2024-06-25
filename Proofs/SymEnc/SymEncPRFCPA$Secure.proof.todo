@@ -96,8 +96,8 @@ Reduction R4(SymEncPRF E, PRF F) compose OTPUniform(F.lambda) against CPA$(E).Ad
 proof:
 
 let:
-    int lambda;
-    int out;
+    Int lambda;
+    Int out;
     PRF F = PRF(lambda, lambda, out);
     SymEncPRF E = SymEncPRF(F);
 
