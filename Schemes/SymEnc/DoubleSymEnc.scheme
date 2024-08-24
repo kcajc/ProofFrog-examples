@@ -1,4 +1,4 @@
-import 'examples/Primitives/SymEnc.primitive';
+import 'examples/Primitives/NonNullableSymEnc.primitive';
 
 Scheme DoubleSymEnc(SymEnc s) extends SymEnc {
     requires s.Message == s.Ciphertext;

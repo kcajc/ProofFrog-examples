@@ -42,7 +42,7 @@ Reduction R3(PRG G, PRG_5_8_a H) compose Security(G) against Security(H).Adversa
     }
 }
 
-Reduction R4(PRG_5_8_a H, Int lambda) compose BitStringSampling(lambda) against Security(H).Adversary {
+Reduction R4(PRG_5_8_a H, Int lambda) compose BitStringSampling(3 * lambda, 3 * lambda) against Security(H).Adversary {
     BitString<H.lambda + H.stretch> Query() {
         return challenger.Query();
     }
