@@ -1,4 +1,4 @@
-import 'examples/Primitives/SymEnc.primitive';
+import 'examples/Primitives/NonNullableSymEnc.primitive';
 import 'examples/Schemes/SymEnc/GeneralDoubleSymEnc.scheme';
 import 'examples/Games/SymEnc/CPA$.game';
 

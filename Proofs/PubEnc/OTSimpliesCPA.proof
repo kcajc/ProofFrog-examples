@@ -1,4 +1,5 @@
 import 'examples/Primitives/PubKeyEnc.primitive';
+import 'examples/Primitives/NonNullableSymEnc.primitive';
 import 'examples/Games/PubKeyEnc/CPA.game';
 import 'examples/Games/PubKeyEnc/OneTimeSecrecy.game';
 
