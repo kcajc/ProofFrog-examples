@@ -1,0 +1,32 @@
+import 'examples/Schemes/SymEnc/SymEncPRF.scheme';
+
+// I guess Proof Frog cannot figure out these are equivalent
+
+Game I2(SymEncPRF E) {
+    Map<BitString<lambda>, BitString<out>> T;
+    Set<BitString<lambda>> R;
+
+    E.Ciphertext CTXT(E.Message m) {
+        BitString<lambda> r <- BitString<lambda> \ R;
+        R = R union r;
+        if (!(r in T)) {
+            T[r] <- BitString<out>;
+        }
+        BitString<out> x = T[r] + m;
+        return [r, x];
+    }
+}
+
+Game I3(SymEncPRF E) {
+    Set<BitString<lambda>> R;
+
+    E.Ciphertext CTXT(E.Message m) {
+        BitString<lambda> r <- BitString<lambda> \ R;
+        R = R union r;
+        BitString<out> z <- BitString<out>;
+        BitString<out> x = z + m;
+        return [r, x];
+    }
+}
+
+export as TempFix;

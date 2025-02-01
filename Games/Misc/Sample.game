@@ -10,7 +10,7 @@ Game NoReplacement(Int lambda) {
 
     BitString<lambda> Samp() {
         BitString<lambda> r <- BitString<lambda> \ R;
-        R = R union {r};
+        R = R union r;
         return r;
     }
 }

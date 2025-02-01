@@ -1,15 +1,15 @@
 import 'examples/Schemes/SymEnc/SymEncPRF.scheme';
 import 'examples/Primitives/PRF.primitive';
 import 'examples/Games/PRF/Security.game';
-import 'Games/Misc/Sample.game';
-import 'Games/SymEnc/CPA$.game';
-import 'Games/Misc/OTPUniform.game';
+import 'examples/Games/Misc/Sample.game';
+import 'examples/Games/Misc/TempFix.game';
+import 'examples/Games/SymEnc/CPA$.game';
+import 'examples/Games/Misc/OTPUniform.game';
 
 Reduction R1(SymEncPRF E, PRF F) compose Security(F) against CPA$(E).Adversary {
     E.Ciphertext CTXT(E.Message m) {
         BitString<lambda> r <- BitString<lambda>;
-        BitString<out> z = g.Lookup(r);
-        BitString<out> x = z + m;
+        BitString<out> x = challenger.Lookup(r) + m;
         return [r, x];
     }
 }
@@ -31,7 +31,7 @@ Reduction R2(SymEncPRF E, PRF F) compose Sample(F.lambda) against CPA$(E).Advers
     Map<BitString<lambda>, BitString<out>> T;
 
     E.Ciphertext CTXT(E.Message m) {
-        BitString<lambda> r = g.Samp();
+        BitString<lambda> r = challenger.Samp();
         if (! (r in T)) {
             T[r] <- BitString<out>;
         }
@@ -46,7 +46,7 @@ Game CPAIntermediate2(SymEncPRF E) {
 
     E.Ciphertext CTXT(E.Message m) {
         BitString<lambda> r <- BitString<lambda> \ R;
-        R = R + r;
+        R = R union r;
         if (!(r in T)) {
             T[r] <- BitString<out>;
         }
@@ -55,12 +55,19 @@ Game CPAIntermediate2(SymEncPRF E) {
     }
 }
 
+Reduction TempFixReduction(SymEncPRF E) compose TempFix(E) against CPA$(E).Adversary {
+    E.Ciphertext CTXT(E.Message m) {
+        E.Ciphertext c = challenger.CTXT(m);
+        return c;
+    }
+}
+
 Game CPAIntermediate3(SymEncPRF E) {
     Set<BitString<lambda>> R;
 
     E.Ciphertext CTXT(E.Message m) {
         BitString<lambda> r <- BitString<lambda> \ R;
-        R = R + r;
+        R = R union r;
         BitString<out> z <- BitString<out>;
         BitString<out> x = z + m;
         return [r, x];
@@ -69,7 +76,7 @@ Game CPAIntermediate3(SymEncPRF E) {
 
 Reduction R3(SymEncPRF E, PRF F) compose Sample(F.lambda) against CPA$(E).Adversary {
     E.Ciphertext CTXT(E.Message m) {
-        BitString<lambda> r <- Samp();
+        BitString<lambda> r = challenger.Samp();
         BitString<out> z <- BitString<out>;
         BitString<out> x = z + m;
         return [r, x];
@@ -79,7 +86,7 @@ Reduction R3(SymEncPRF E, PRF F) compose Sample(F.lambda) against CPA$(E).Advers
 Game CPAIntermediate4(SymEncPRF E) {
     E.Ciphertext CTXT(E.Message m) {
         BitString<lambda> r <- BitString<lambda>;
-        BitString<lambda> z <- BitString<lambda>;
+        BitString<out> z <- BitString<out>;
         BitString<out> x = z + m;
         return [r, x];
     }
@@ -88,7 +95,7 @@ Game CPAIntermediate4(SymEncPRF E) {
 Reduction R4(SymEncPRF E, PRF F) compose OTPUniform(F.lambda) against CPA$(E).Adversary {
     E.Ciphertext CTXT(E.Message m) {
         BitString<lambda> r <- BitString<lambda>;
-        BitString<out> x = g.Eavesdrop(m);
+        BitString<out> x = challenger.CTXT(m);
         return [r, x];
     }
 }
@@ -105,6 +112,8 @@ assume:
     Security(F);
     Sample(lambda);
     OTPUniform(out);
+    // Hardcoded equivalency
+    TempFix(E);
 
 theorem:
     CPA$(E);
@@ -130,6 +139,10 @@ games:
     // By codewise equivalency
     CPAIntermediate2(E) against CPA$(E).Adversary;
 
+    // Hardcoded equivalency
+    TempFix(E).I2 compose TempFixReduction(E) against CPA$(E).Adversary;
+    TempFix(E).I3 compose TempFixReduction(E) against CPA$(E).Adversary;
+
     // By codewise equivalency
     CPAIntermediate3(E) against CPA$(E).Adversary;
 
@@ -143,10 +156,10 @@ games:
     CPAIntermediate4(E) against CPA$(E).Adversary;
 
     // By codewise-equivalence
-    OTP(out).Real compose R4(E, F) against CPA$(E).Adversary;
+    OTPUniform(out).Real compose R4(E, F) against CPA$(E).Adversary;
 
-    // By assumptio
-    OTP(out).Random compose R4(E, F) against CPA$(E).Adversary;
+    // By assumption
+    OTPUniform(out).Random compose R4(E, F) against CPA$(E).Adversary;
 
     // By codewise-equivalency
     CPA$(E).Random against CPA$(E).Adversary;
